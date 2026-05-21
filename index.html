@@ -3,24 +3,26 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AMV Tourney Selector</title>
+  <title>AT6 Qualifiers | Apollo AMV Tourney</title>
   <style>
     :root {
       color-scheme: dark;
-      --bg: #111416;
-      --panel: #1a1f22;
-      --panel-2: #22282c;
-      --panel-3: #101315;
-      --line: #343d42;
-      --line-strong: #53616a;
-      --text: #f6f4ef;
-      --muted: #aeb8ba;
-      --soft: #d9dedc;
-      --cyan: #65d6cc;
-      --gold: #f0bd62;
-      --red: #ec6b66;
+      --bg: #08070d;
+      --panel: #15111d;
+      --panel-2: #211932;
+      --panel-3: #0d0b12;
+      --line: #3a2d4f;
+      --line-strong: #8063ca;
+      --text: #fffaf2;
+      --muted: #b9afc8;
+      --soft: #eee6ff;
+      --cyan: #66d8ff;
+      --gold: #ffc64a;
+      --red: #a867ff;
       --green: #80d37a;
-      --blue: #78a7ff;
+      --blue: #5d7dff;
+      --purple: #9d4dff;
+      --violet: #4e1ccb;
       --ink: #090b0c;
       --shadow: 0 24px 80px rgba(0, 0, 0, .36);
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -34,8 +36,9 @@
       margin: 0;
       min-height: 100vh;
       background:
-        linear-gradient(120deg, rgba(101, 214, 204, .10), transparent 32rem),
-        linear-gradient(315deg, rgba(240, 189, 98, .08), transparent 34rem),
+        radial-gradient(circle at 70% 4%, rgba(157, 77, 255, .24), transparent 30rem),
+        linear-gradient(120deg, rgba(36, 25, 82, .62), transparent 36rem),
+        linear-gradient(315deg, rgba(255, 198, 74, .08), transparent 34rem),
         var(--bg);
       color: var(--text);
     }
@@ -45,11 +48,11 @@
       position: fixed;
       inset: 0;
       pointer-events: none;
-      opacity: .12;
+      opacity: .11;
       background-image:
         linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
-      background-size: 46px 46px;
+      background-size: 44px 44px;
       mask-image: linear-gradient(to bottom, #000, transparent 80%);
     }
 
@@ -61,7 +64,7 @@
       border: 1px solid var(--line);
       min-height: 40px;
       border-radius: 8px;
-      background: #252c30;
+      background: #241b33;
       color: var(--text);
       padding: 0 13px;
       cursor: pointer;
@@ -71,7 +74,7 @@
     button:hover {
       transform: translateY(-1px);
       border-color: var(--line-strong);
-      background: #303940;
+      background: #332544;
     }
 
     button:disabled {
@@ -84,7 +87,7 @@
       width: 100%;
       border: 1px solid var(--line);
       border-radius: 8px;
-      background: #111619;
+      background: #0e0b14;
       color: var(--text);
       padding: 11px 12px;
       outline: none;
@@ -100,8 +103,8 @@
     }
 
     input:focus, textarea:focus, select:focus {
-      border-color: var(--cyan);
-      box-shadow: 0 0 0 3px rgba(101, 214, 204, .14);
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(157, 77, 255, .18);
     }
 
     label {
@@ -131,7 +134,9 @@
       overflow: auto;
       padding: 22px;
       border-right: 1px solid var(--line);
-      background: rgba(13, 16, 18, .82);
+      background:
+        linear-gradient(180deg, rgba(19, 13, 30, .94), rgba(8, 7, 13, .9)),
+        rgba(13, 16, 18, .82);
       backdrop-filter: blur(18px);
     }
 
@@ -148,24 +153,30 @@
     }
 
     .mark {
-      width: 44px;
-      height: 44px;
-      border-radius: 10px;
+      width: 52px;
+      height: 52px;
+      border-radius: 8px;
       display: grid;
       place-items: center;
       background:
-        linear-gradient(135deg, rgba(236, 107, 102, .95), transparent 47%),
-        linear-gradient(315deg, rgba(101, 214, 204, .9), transparent 47%),
-        #21272b;
+        linear-gradient(135deg, rgba(93,125,255,.28), rgba(157,77,255,.2)),
+        #030508;
       border: 1px solid rgba(255,255,255,.16);
       box-shadow: var(--shadow);
-      font-weight: 950;
-      color: white;
+      overflow: hidden;
+      padding: 5px;
+    }
+
+    .mark img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
     }
 
     .brand h1 {
       margin: 0;
-      font-size: 16px;
+      font-size: 18px;
       line-height: 1.08;
       letter-spacing: 0;
     }
@@ -193,8 +204,8 @@
     }
 
     .nav button.active {
-      background: #303a3d;
-      border-color: #66747b;
+      background: linear-gradient(90deg, rgba(157,77,255,.28), rgba(255,198,74,.08));
+      border-color: var(--line-strong);
     }
 
     .nav small {
@@ -226,9 +237,9 @@
     .notice {
       margin-top: 20px;
       padding: 13px;
-      border: 1px solid rgba(101, 214, 204, .24);
+      border: 1px solid rgba(157, 77, 255, .28);
       border-radius: 8px;
-      background: rgba(101, 214, 204, .08);
+      background: rgba(157, 77, 255, .1);
       color: var(--soft);
       font-size: 13px;
       line-height: 1.45;
@@ -256,6 +267,8 @@
       font-size: clamp(32px, 5vw, 64px);
       line-height: .95;
       letter-spacing: 0;
+      text-transform: uppercase;
+      text-shadow: 0 9px 26px rgba(0,0,0,.34);
     }
 
     .subtitle {
@@ -273,19 +286,68 @@
       border: 1px solid rgba(255,255,255,.12);
       border-radius: 8px;
       overflow: hidden;
-      background: #0d1011;
+      background:
+        radial-gradient(circle at 50% 22%, rgba(255, 198, 74, .18), transparent 8rem),
+        linear-gradient(135deg, rgba(8, 6, 13, .95), rgba(78, 28, 203, .82)),
+        #030508;
       box-shadow: var(--shadow);
       position: relative;
+      display: grid;
+      place-items: center;
     }
 
     .hero-art canvas {
       width: 100%;
       height: 100%;
       display: block;
+      opacity: .26;
+      grid-area: 1 / 1;
+    }
+
+    .hero-logo {
+      grid-area: 1 / 1;
+      width: min(78%, 280px);
+      height: auto;
+      object-fit: contain;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 24px 34px rgba(0,0,0,.55));
+    }
+
+    .poster-kicker {
+      grid-area: 1 / 1;
+      align-self: start;
+      justify-self: center;
+      margin-top: 16px;
+      padding: 7px 18px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: linear-gradient(90deg, rgba(90, 35, 190, .96), rgba(170, 76, 255, .9));
+      color: white;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 950;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 16px 34px rgba(25, 0, 70, .4);
+    }
+
+    .poster-stars {
+      grid-area: 1 / 1;
+      align-self: end;
+      justify-self: center;
+      margin-bottom: 16px;
+      color: var(--gold);
+      font-size: 18px;
+      letter-spacing: .28em;
+      text-shadow: 0 0 18px rgba(255, 198, 74, .38);
+      position: relative;
+      z-index: 2;
     }
 
     .hero-art::after {
-      content: "AMV";
+      content: "AT6";
       position: absolute;
       right: 12px;
       bottom: 9px;
@@ -314,7 +376,7 @@
       gap: 7px;
       border: 1px solid var(--line);
       border-radius: 999px;
-      background: #151a1d;
+      background: #171120;
       padding: 7px 10px;
       color: var(--muted);
       font-size: 12px;
@@ -323,7 +385,7 @@
 
     .pill.good { color: var(--green); border-color: rgba(128, 211, 122, .34); }
     .pill.warn { color: var(--gold); border-color: rgba(240, 189, 98, .38); }
-    .pill.hot { color: var(--red); border-color: rgba(236, 107, 102, .38); }
+    .pill.hot { color: var(--red); border-color: rgba(168, 103, 255, .38); }
 
     .grid {
       display: grid;
@@ -341,7 +403,9 @@
 
     .panel {
       border: 1px solid var(--line);
-      background: rgba(26, 31, 34, .86);
+      background:
+        linear-gradient(180deg, rgba(30, 21, 47, .92), rgba(13, 11, 18, .9)),
+        rgba(26, 31, 34, .86);
       border-radius: 8px;
       box-shadow: var(--shadow);
     }
@@ -388,9 +452,9 @@
     }
 
     .primary {
-      background: var(--cyan);
-      border-color: var(--cyan);
-      color: #061112;
+      background: linear-gradient(135deg, var(--gold), #ffe6a0);
+      border-color: rgba(255, 198, 74, .86);
+      color: #201200;
       font-weight: 900;
     }
 
@@ -411,7 +475,9 @@
 
     .entry-card {
       border: 1px solid var(--line);
-      background: #171c1f;
+      background:
+        linear-gradient(90deg, rgba(157,77,255,.09), transparent 46%),
+        #15111d;
       border-radius: 8px;
       overflow: hidden;
     }
@@ -431,7 +497,7 @@
       background:
         linear-gradient(135deg, var(--accent-a), transparent 54%),
         linear-gradient(315deg, var(--accent-b), transparent 48%),
-        #0d1113;
+        #0d0718;
       display: grid;
       place-items: center;
       position: relative;
@@ -538,7 +604,7 @@
       gap: 10px;
       align-items: center;
       border: 1px solid var(--line);
-      background: #151a1d;
+      background: #171120;
       border-radius: 8px;
       padding: 10px;
     }
@@ -549,7 +615,7 @@
       display: grid;
       place-items: center;
       border-radius: 8px;
-      background: #293236;
+      background: linear-gradient(135deg, #2b1946, #151020);
       color: var(--gold);
       font-weight: 950;
       border: 1px solid rgba(255,255,255,.09);
@@ -576,7 +642,7 @@
 
     .match {
       border: 1px solid var(--line);
-      background: #14191b;
+      background: #141020;
       border-radius: 8px;
       overflow: hidden;
     }
@@ -622,8 +688,8 @@
       right: 20px;
       bottom: 20px;
       z-index: 20;
-      border: 1px solid rgba(101, 214, 204, .34);
-      background: #101618;
+      border: 1px solid rgba(157, 77, 255, .42);
+      background: #120e1c;
       color: var(--text);
       border-radius: 8px;
       padding: 13px 14px;
@@ -787,10 +853,10 @@
   <div class="app-shell">
     <aside>
       <div class="brand">
-        <div class="mark">A</div>
+        <div class="mark"><img src="apollo-logo.png" alt="Apollo AMV Tourney logo"></div>
         <div>
-          <h1 id="sideEventName">AMV Tourney Selector</h1>
-          <span>Anonymous entries, public voting, clean seeds</span>
+          <h1 id="sideEventName">AT6 Qualifiers</h1>
+          <span>Apollo AMV Tourney</span>
         </div>
       </div>
 
@@ -798,7 +864,6 @@
         <button class="active" data-tab="submit">Submit <small id="submitBadge">Open</small></button>
         <button data-tab="vote">Vote <small id="voteBadge">Open</small></button>
         <button data-tab="seeds">Seeds <small>Top 8</small></button>
-        <button data-tab="admin">Admin <small>Tools</small></button>
       </nav>
 
       <div class="side-title">Event Pulse</div>
@@ -817,10 +882,15 @@
         <div class="topbar">
           <div>
             <div class="eyebrow">Participant Intake</div>
-            <h2>Collect edits without names attached.</h2>
-            <p class="subtitle">Teams can submit a direct MP4 with anime/song info and a private team handle. Voters see the entry, not the team identity.</p>
+            <h2>Apollo AMV Tourney Qualifiers.</h2>
+            <p class="subtitle">Submit your AT6 qualifier edit as a direct MP4 with anime/song info and a private team handle. Voters see the entry, not the team identity.</p>
           </div>
-          <div class="hero-art" aria-hidden="true"><canvas id="visualizer" width="720" height="405"></canvas></div>
+          <div class="hero-art" aria-hidden="true">
+            <canvas id="visualizer" width="720" height="405"></canvas>
+            <div class="poster-kicker">Apollo</div>
+            <img class="hero-logo" src="apollo-logo.png" alt="">
+            <div class="poster-stars">* * *</div>
+          </div>
         </div>
 
         <div class="grid two">
@@ -858,7 +928,6 @@
               </div>
               <div class="actions">
                 <button class="primary" type="submit">Submit Entry</button>
-                <button class="ghost" type="button" id="loadDemoBtn">Load Demo Entries</button>
               </div>
             </div>
           </form>
@@ -881,7 +950,7 @@
         <div class="topbar">
           <div>
             <div class="eyebrow">Community Voting</div>
-            <h2>Let the strongest edits rise.</h2>
+            <h2>Rank the AT6 field.</h2>
             <p class="subtitle">Each browser gets one ranked ballot: 1st place is 3 points, 2nd place is 2 points, and 3rd place is 1 point. The leaderboard updates instantly.</p>
           </div>
         </div>
@@ -903,7 +972,7 @@
         <div class="topbar">
           <div>
             <div class="eyebrow">Top 8 Seeding</div>
-            <h2>Build the bracket from points.</h2>
+            <h2>Lock the Apollo top 8.</h2>
             <p class="subtitle">The top eight are ranked by weighted ballot points, then submission time as a tiebreaker. Quarterfinal pairings use standard 1v8, 4v5, 3v6, 2v7 placement.</p>
           </div>
         </div>
@@ -936,81 +1005,6 @@
         </div>
       </section>
 
-      <section id="admin" class="tab-page">
-        <div class="topbar">
-          <div>
-            <div class="eyebrow">Organizer Controls</div>
-            <h2>Run the qualifier cleanly.</h2>
-            <p class="subtitle">Rename the event, close submissions, pause voting, reveal teams when voting ends, export your data, or prune test entries.</p>
-          </div>
-        </div>
-
-        <div class="grid two">
-          <div class="panel">
-            <div class="panel-head">
-              <div>
-                <h3>Event Settings</h3>
-                <p>These update the public pages immediately.</p>
-              </div>
-            </div>
-            <div class="panel-body">
-              <div class="form-grid">
-                <label class="wide">Event name
-                  <input id="eventNameInput">
-                </label>
-                <label>Seed count
-                  <select id="seedCountInput">
-                    <option value="8">Top 8</option>
-                    <option value="16">Top 16</option>
-                  </select>
-                </label>
-                <label>Tourney rounds
-                  <select id="roundCountInput">
-                    <option value="3">3 rounds</option>
-                    <option value="4">4 rounds</option>
-                  </select>
-                </label>
-              </div>
-
-              <div class="switch-row">
-                <div><strong>Accept submissions</strong><span>Turn off when your intake window closes.</span></div>
-                <button id="toggleSubmissionsBtn"></button>
-              </div>
-              <div class="switch-row">
-                <div><strong>Accept ballots</strong><span>Turn off while you verify links or lock results.</span></div>
-                <button id="toggleVotingBtn"></button>
-              </div>
-              <div class="switch-row">
-                <div><strong>Reveal team handles</strong><span>Keep off during anonymous voting.</span></div>
-                <button id="toggleRevealBtn"></button>
-              </div>
-
-              <div class="actions">
-                <button class="primary" id="saveSettingsBtn">Save Settings</button>
-                <button id="exportBtn">Export JSON</button>
-                <button id="importBtn">Import JSON</button>
-                <input class="hidden-file" id="importFile" type="file" accept="application/json">
-                <button class="danger" id="clearVotesBtn">Clear Ballots</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="panel">
-            <div class="panel-head">
-              <div>
-                <h3>Submission Admin</h3>
-                <p>Remove duplicates, broken links, or accidental tests.</p>
-              </div>
-            </div>
-            <div class="panel-body">
-              <div id="adminList" class="admin-list"></div>
-              <div class="actions">
-                <button class="danger" id="resetAllBtn">Reset Everything</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
     </main>
   </div>
 
@@ -1036,6 +1030,7 @@
     const SUPABASE_REST_URL = `${SUPABASE_PROJECT_URL}/rest/v1`;
     const SUPABASE_STORAGE_URL = `${SUPABASE_PROJECT_URL}/storage/v1`;
     const VIDEO_BUCKET = "amv-videos";
+    const EVENT_NAME = "AT6 Qualifiers";
     const STORAGE_KEY = "amv-tourney-selector-v1";
     const VOTER_KEY = "amv-tourney-voter-id";
     const DB_NAME = "amv-tourney-media";
@@ -1088,21 +1083,7 @@
       entryList: document.getElementById("entryList"),
       seedTable: document.getElementById("seedTable"),
       bracketView: document.getElementById("bracketView"),
-      eventNameInput: document.getElementById("eventNameInput"),
-      seedCountInput: document.getElementById("seedCountInput"),
-      roundCountInput: document.getElementById("roundCountInput"),
-      toggleSubmissionsBtn: document.getElementById("toggleSubmissionsBtn"),
-      toggleVotingBtn: document.getElementById("toggleVotingBtn"),
-      toggleRevealBtn: document.getElementById("toggleRevealBtn"),
-      saveSettingsBtn: document.getElementById("saveSettingsBtn"),
-      exportBtn: document.getElementById("exportBtn"),
-      importBtn: document.getElementById("importBtn"),
-      importFile: document.getElementById("importFile"),
-      clearVotesBtn: document.getElementById("clearVotesBtn"),
-      resetAllBtn: document.getElementById("resetAllBtn"),
-      adminList: document.getElementById("adminList"),
       copySeedsBtn: document.getElementById("copySeedsBtn"),
-      loadDemoBtn: document.getElementById("loadDemoBtn"),
       toast: document.getElementById("toast"),
       playerModal: document.getElementById("playerModal"),
       playerTitle: document.getElementById("playerTitle"),
@@ -1144,6 +1125,7 @@
 
       try {
         entry.videoPath = await uploadVideoToSupabase(file);
+        entry.thumbnailPath = await uploadThumbnailToSupabase(file).catch(() => "");
         const savedEntry = await createRemoteSubmission(entry, document.getElementById("teamInput").value.trim());
         state.entries.unshift(savedEntry);
         saveState();
@@ -1161,16 +1143,6 @@
 
     el.searchInput.addEventListener("input", renderEntries);
     el.sortSelect.addEventListener("change", renderEntries);
-    el.loadDemoBtn.addEventListener("click", loadDemo);
-    el.saveSettingsBtn.addEventListener("click", saveSettings);
-    el.toggleSubmissionsBtn.addEventListener("click", () => toggleSetting("submissionsOpen"));
-    el.toggleVotingBtn.addEventListener("click", () => toggleSetting("votingOpen"));
-    el.toggleRevealBtn.addEventListener("click", () => toggleSetting("revealTeams"));
-    el.exportBtn.addEventListener("click", exportData);
-    el.importBtn.addEventListener("click", () => el.importFile.click());
-    el.importFile.addEventListener("change", importData);
-    el.clearVotesBtn.addEventListener("click", clearVotes);
-    el.resetAllBtn.addEventListener("click", resetAll);
     el.copySeedsBtn.addEventListener("click", copySeeds);
     el.reloadPlayerBtn.addEventListener("click", reloadPlayer);
     el.closePlayerBtn.addEventListener("click", closePlayer);
@@ -1233,6 +1205,8 @@
         notes: entry.notes || "",
         link: publicVideoUrl(entry.video_path),
         videoPath: entry.video_path,
+        thumbnailPath: entry.thumbnail_path || "",
+        thumbnailUrl: entry.thumbnail_path ? publicVideoUrl(entry.thumbnail_path) : "",
         mediaType: "remote-file",
         fileName: entry.file_name || "",
         fileSize: entry.file_size || 0,
@@ -1280,6 +1254,80 @@
       return path;
     }
 
+    async function uploadThumbnailToSupabase(file) {
+      const blob = await createVideoThumbnail(file);
+      const path = `thumbs/${crypto.randomUUID ? crypto.randomUUID() : Date.now()}.jpg`;
+      const response = await fetch(`${SUPABASE_STORAGE_URL}/object/${VIDEO_BUCKET}/${path}`, {
+        method: "POST",
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "image/jpeg",
+          "x-upsert": "false"
+        },
+        body: blob
+      });
+
+      if (!response.ok) {
+        const detail = await response.text();
+        throw new Error(detail || "Thumbnail upload failed");
+      }
+      return path;
+    }
+
+    function createVideoThumbnail(file) {
+      return new Promise((resolve, reject) => {
+        const video = document.createElement("video");
+        const canvas = document.createElement("canvas");
+        const url = URL.createObjectURL(file);
+        video.preload = "metadata";
+        video.muted = true;
+        video.playsInline = true;
+        video.src = url;
+
+        const cleanup = () => URL.revokeObjectURL(url);
+        video.onerror = () => {
+          cleanup();
+          reject(new Error("Could not read video for thumbnail"));
+        };
+        video.onloadedmetadata = () => {
+          video.currentTime = Math.min(1.5, Math.max(0, (video.duration || 2) / 4));
+        };
+        video.onseeked = () => {
+          const width = 640;
+          const height = Math.round(width * 9 / 16);
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#080b0d";
+          ctx.fillRect(0, 0, width, height);
+
+          const sourceRatio = video.videoWidth / video.videoHeight;
+          const targetRatio = width / height;
+          let drawWidth = width;
+          let drawHeight = height;
+          let x = 0;
+          let y = 0;
+
+          if (sourceRatio > targetRatio) {
+            drawHeight = height;
+            drawWidth = height * sourceRatio;
+            x = (width - drawWidth) / 2;
+          } else {
+            drawWidth = width;
+            drawHeight = width / sourceRatio;
+            y = (height - drawHeight) / 2;
+          }
+
+          ctx.drawImage(video, x, y, drawWidth, drawHeight);
+          canvas.toBlob((blob) => {
+            cleanup();
+            blob ? resolve(blob) : reject(new Error("Could not create thumbnail"));
+          }, "image/jpeg", .82);
+        };
+      });
+    }
+
     async function createRemoteSubmission(entry, teamHandle) {
       const inserted = await supabaseFetch("/entries", {
         method: "POST",
@@ -1290,6 +1338,7 @@
           song_audio: entry.song,
           notes: entry.notes,
           video_path: entry.videoPath,
+          thumbnail_path: entry.thumbnailPath || null,
           file_name: entry.fileName,
           file_size: entry.fileSize,
           is_approved: true
@@ -1335,8 +1384,10 @@
         try {
           const parsed = JSON.parse(saved);
           const entries = Array.isArray(parsed.entries) ? parsed.entries : [];
+          const settings = { ...defaultSettings(), ...parsed.settings };
+          if (settings.eventName === "AMV Tourney Selector") settings.eventName = EVENT_NAME;
           return {
-            settings: { ...defaultSettings(), ...parsed.settings },
+            settings,
             entries,
             ballots: parsed.ballots && typeof parsed.ballots === "object" ? parsed.ballots : migrateLegacyVotes(entries)
           };
@@ -1349,7 +1400,7 @@
 
     function defaultSettings() {
       return {
-        eventName: "AMV Tourney Selector",
+        eventName: EVENT_NAME,
         seedCount: 8,
         roundCount: 3,
         submissionsOpen: true,
@@ -1493,16 +1544,10 @@
       el.statFormat.textContent = `${state.settings.roundCount} rounds`;
       el.voterPill.textContent = "Voter " + voterId.slice(0, 6).toUpperCase();
 
-      el.eventNameInput.value = state.settings.eventName;
-      el.seedCountInput.value = String(state.settings.seedCount);
-      el.roundCountInput.value = String(state.settings.roundCount);
-      updateToggleLabels();
-
       renderPreview(seeds);
       renderEntries();
       renderSeeds(seeds);
       renderBracket(seeds);
-      renderAdmin();
     }
 
     function renderPreview(seeds) {
@@ -1568,7 +1613,7 @@
       return `
         <article class="entry-card">
           <div class="entry-main">
-            <a class="thumb" href="${escapeAttr(entry.link)}" target="_blank" rel="noopener" data-play="${entry.id}" style="--accent-a:${accent[0]}; --accent-b:${accent[1]};" aria-label="Play ${escapeAttr(entry.title)}">
+            <a class="thumb" href="${escapeAttr(entry.link)}" target="_blank" rel="noopener" data-play="${entry.id}" style="--accent-a:${accent[0]}; --accent-b:${accent[1]}; ${entry.thumbnailUrl ? `background-image: linear-gradient(rgba(0,0,0,.08), rgba(0,0,0,.08)), url('${escapeAttr(entry.thumbnailUrl)}'); background-size: cover; background-position: center;` : ""}" aria-label="Play ${escapeAttr(entry.title)}">
               <span>Play</span>
             </a>
             <div>
@@ -1797,153 +1842,6 @@
           </div>
         </div>
       `;
-    }
-
-    function renderAdmin() {
-      if (!state.entries.length) {
-        el.adminList.innerHTML = `<div class="empty">No submissions to manage.</div>`;
-        return;
-      }
-
-      el.adminList.innerHTML = state.entries.map((entry) => `
-        <div class="admin-item">
-          <div>
-            <strong>${escapeHtml(entry.title)}</strong>
-            <div class="entry-meta">${escapeHtml(entry.team)} / ${scoreEntry(entry)} points</div>
-          </div>
-          <button class="danger" data-delete="${entry.id}">Remove</button>
-        </div>
-      `).join("");
-
-      el.adminList.querySelectorAll("[data-delete]").forEach((button) => {
-        button.addEventListener("click", () => deleteEntry(button.dataset.delete));
-      });
-    }
-
-    function updateToggleLabels() {
-      el.toggleSubmissionsBtn.textContent = state.settings.submissionsOpen ? "Open" : "Closed";
-      el.toggleVotingBtn.textContent = state.settings.votingOpen ? "Open" : "Closed";
-      el.toggleRevealBtn.textContent = state.settings.revealTeams ? "Revealed" : "Hidden";
-    }
-
-    function saveSettings() {
-      state.settings.eventName = el.eventNameInput.value.trim() || "AMV Tourney Selector";
-      state.settings.seedCount = Number(el.seedCountInput.value);
-      state.settings.roundCount = Number(el.roundCountInput.value);
-      saveState();
-      showToast("Settings saved.");
-      render();
-    }
-
-    function toggleSetting(key) {
-      state.settings[key] = !state.settings[key];
-      saveState();
-      render();
-    }
-
-    async function deleteEntry(id) {
-      const entry = state.entries.find((item) => item.id === id);
-      if (!entry || !confirm(`Remove "${entry.title}"?`)) return;
-      state.entries = state.entries.filter((item) => item.id !== id);
-      if (entry.mediaType === "file") await deleteVideoFile(id);
-      Object.values(state.ballots).forEach((ballot) => {
-        Object.keys(ballot).forEach((rank) => {
-          if (ballot[rank] === id) delete ballot[rank];
-        });
-      });
-      Object.keys(state.ballots).forEach((ballotId) => {
-        if (!Object.keys(state.ballots[ballotId]).length) delete state.ballots[ballotId];
-      });
-      saveState();
-      showToast("Entry removed.");
-      render();
-    }
-
-    function clearVotes() {
-      if (!Object.keys(state.ballots).length || !confirm("Clear all ballots but keep submissions?")) return;
-      state.ballots = {};
-      saveState();
-      showToast("Ballots cleared.");
-      render();
-    }
-
-    async function resetAll() {
-      if (!confirm("Reset all submissions, ballots, and settings?")) return;
-      state.settings = defaultSettings();
-      state.entries = [];
-      state.ballots = {};
-      await clearVideoFiles();
-      saveState();
-      showToast("Everything reset.");
-      render();
-    }
-
-    function loadDemo() {
-      const now = Date.now();
-      state.entries = demoEntries.map((item, index) => ({
-        id: "demo-" + index + "-" + now,
-        title: item[0],
-        team: item[1],
-        source: item[2],
-        song: item[3],
-        link: item[4],
-        notes: item[5],
-        createdAt: new Date(now + index * 60000).toISOString(),
-        accent: index % accents.length
-      }));
-      state.ballots = {};
-      state.entries.forEach((entry, index) => {
-        const firstPlaceBallots = Math.max(1, 18 - index * 2);
-        for (let voteIndex = 0; voteIndex < firstPlaceBallots; voteIndex++) {
-          state.ballots[`demo-voter-${index}-${voteIndex}`] = {
-            first: entry.id,
-            second: state.entries[(index + 1) % state.entries.length].id,
-            third: state.entries[(index + 2) % state.entries.length].id
-          };
-        }
-      });
-      saveState();
-      showToast("Demo entries loaded.");
-      render();
-    }
-
-    function exportData() {
-      const payload = JSON.stringify({ ...state, exportedAt: new Date().toISOString() }, null, 2);
-      const blob = new Blob([payload], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = state.settings.eventName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") + "-amv-tourney.json";
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      URL.revokeObjectURL(url);
-      showToast("Export created.");
-    }
-
-    function importData(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const parsed = JSON.parse(reader.result);
-          if (!Array.isArray(parsed.entries)) throw new Error("Missing entries");
-          state.settings = { ...defaultSettings(), ...parsed.settings };
-          state.entries = parsed.entries.map((entry, index) => ({
-            ...entry,
-            accent: Number.isFinite(entry.accent) ? entry.accent : index % accents.length
-          }));
-          state.ballots = parsed.ballots && typeof parsed.ballots === "object" ? parsed.ballots : migrateLegacyVotes(state.entries);
-          saveState();
-          showToast("Import complete.");
-          render();
-        } catch (error) {
-          showToast("That file could not be imported.");
-        }
-      };
-      reader.readAsText(file);
-      event.target.value = "";
     }
 
     function copySeeds() {
