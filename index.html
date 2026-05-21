@@ -279,6 +279,60 @@
       font-size: 15px;
     }
 
+    .countdown {
+      margin-top: 18px;
+      max-width: 760px;
+      border: 1px solid rgba(157, 77, 255, .4);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(157, 77, 255, .14), rgba(255, 198, 74, .06)),
+        rgba(12, 8, 20, .84);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+      padding: 13px;
+    }
+
+    .countdown-label {
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .time-cell {
+      min-width: 0;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      background: rgba(0,0,0,.22);
+      padding: 10px 8px;
+      text-align: center;
+    }
+
+    .time-cell strong {
+      display: block;
+      color: var(--text);
+      font-size: clamp(24px, 3vw, 42px);
+      line-height: .9;
+      font-weight: 950;
+    }
+
+    .time-cell span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
     .hero-art {
       width: min(32vw, 360px);
       min-width: 260px;
@@ -294,6 +348,7 @@
       position: relative;
       display: grid;
       place-items: center;
+      padding: 16px;
     }
 
     .hero-art canvas {
@@ -306,31 +361,12 @@
 
     .hero-logo {
       grid-area: 1 / 1;
-      width: min(78%, 280px);
-      height: auto;
+      width: min(82%, 260px);
+      height: min(78%, 150px);
       object-fit: contain;
       position: relative;
       z-index: 1;
       filter: drop-shadow(0 24px 34px rgba(0,0,0,.55));
-    }
-
-    .poster-kicker {
-      grid-area: 1 / 1;
-      align-self: start;
-      justify-self: center;
-      margin-top: 16px;
-      padding: 7px 18px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: linear-gradient(90deg, rgba(90, 35, 190, .96), rgba(170, 76, 255, .9));
-      color: white;
-      border-radius: 999px;
-      font-size: 13px;
-      font-weight: 950;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      position: relative;
-      z-index: 2;
-      box-shadow: 0 16px 34px rgba(25, 0, 70, .4);
     }
 
     .poster-stars {
@@ -526,6 +562,16 @@
       background: rgba(0,0,0,.22);
     }
 
+    .thumb-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: .86;
+      pointer-events: none;
+    }
+
     .entry-title {
       display: flex;
       flex-wrap: wrap;
@@ -638,6 +684,181 @@
     .bracket {
       display: grid;
       gap: 10px;
+    }
+
+    .playoff-board {
+      position: relative;
+      min-height: 560px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 8px;
+      padding: 20px;
+      background:
+        radial-gradient(circle at 18% 86%, rgba(157, 77, 255, .26), transparent 15rem),
+        radial-gradient(circle at 95% 4%, rgba(255, 132, 34, .16), transparent 18rem),
+        linear-gradient(135deg, rgba(17, 11, 25, .98), rgba(9, 8, 12, .96));
+    }
+
+    .playoff-board::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(115deg, transparent 0 42%, rgba(255,255,255,.035) 42% 43%, transparent 43%),
+        radial-gradient(circle at center, transparent 0 12rem, rgba(255,255,255,.035) 12.1rem 12.25rem, transparent 12.35rem);
+      opacity: .7;
+      pointer-events: none;
+    }
+
+    .playoff-title {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .playoff-title strong {
+      font-size: clamp(22px, 3vw, 38px);
+      line-height: .9;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .playoff-title span {
+      color: var(--gold);
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: 12px;
+    }
+
+    .playoff-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(230px, 1.05fr) minmax(132px, .58fr) minmax(118px, .48fr);
+      gap: 24px;
+      align-items: center;
+    }
+
+    .playoff-column {
+      display: grid;
+      gap: 20px;
+      position: relative;
+    }
+
+    .playoff-column.semis {
+      gap: 122px;
+    }
+
+    .playoff-column.finals {
+      justify-content: center;
+    }
+
+    .round-label {
+      color: var(--text);
+      font-weight: 950;
+      font-size: clamp(20px, 2.2vw, 30px);
+      line-height: .9;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      text-shadow: 0 10px 28px rgba(0,0,0,.38);
+    }
+
+    .playoff-match {
+      position: relative;
+      display: grid;
+      gap: 8px;
+    }
+
+    .playoff-match::after {
+      content: "";
+      position: absolute;
+      right: -18px;
+      top: 50%;
+      width: 18px;
+      height: 2px;
+      background: var(--gold);
+      box-shadow: 0 0 14px rgba(255, 198, 74, .34);
+    }
+
+    .playoff-team {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 9px;
+      min-height: 52px;
+      border: 1px solid rgba(255, 198, 74, .24);
+      background: rgba(7, 6, 10, .82);
+      border-radius: 7px;
+      padding: 7px;
+    }
+
+    .team-badge {
+      height: 38px;
+      width: 38px;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--gold);
+      border-radius: 6px;
+      background:
+        linear-gradient(135deg, rgba(93,125,255,.54), rgba(157,77,255,.36)),
+        #120b20;
+      color: var(--gold);
+      font-weight: 950;
+    }
+
+    .playoff-team strong {
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-size: 14px;
+    }
+
+    .playoff-team span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-top: 2px;
+    }
+
+    .team-score {
+      color: var(--gold);
+      font-weight: 950;
+    }
+
+    .advance-stack {
+      display: grid;
+      gap: 10px;
+      position: relative;
+    }
+
+    .advance-stack::before {
+      content: "";
+      position: absolute;
+      left: -18px;
+      top: 50%;
+      width: 18px;
+      height: 2px;
+      background: var(--gold);
+    }
+
+    .advance-slot {
+      min-height: 54px;
+      border-radius: 4px;
+      background: linear-gradient(135deg, #ffae18, #ffc64a);
+      box-shadow: 0 0 24px rgba(255, 168, 24, .22);
+      color: rgba(33, 18, 0, .74);
+      display: grid;
+      place-items: center;
+      font-weight: 950;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      font-size: 11px;
     }
 
     .match {
@@ -835,6 +1056,20 @@
       .topbar { grid-template-columns: 1fr; }
       .hero-art { width: 100%; min-width: 0; }
       .grid.two, .grid.three { grid-template-columns: 1fr; }
+      .playoff-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .playoff-column.semis {
+        gap: 20px;
+      }
+      .playoff-match::after,
+      .advance-stack::before {
+        display: none;
+      }
+      .playoff-board {
+        min-height: auto;
+      }
     }
 
     @media (max-width: 680px) {
@@ -845,6 +1080,7 @@
       .vote-box .vote-wrap { grid-column: 1; }
       .rank-buttons { grid-column: 2; grid-row: 1; }
       .form-grid { grid-template-columns: 1fr; }
+      .countdown-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .topbar h2 { font-size: 34px; }
     }
   </style>
@@ -864,6 +1100,7 @@
         <button class="active" data-tab="submit">Submit <small id="submitBadge">Open</small></button>
         <button data-tab="vote">Vote <small id="voteBadge">Open</small></button>
         <button data-tab="seeds">Seeds <small>Top 8</small></button>
+        <button data-tab="bracket">Bracket <small>AT6</small></button>
       </nav>
 
       <div class="side-title">Event Pulse</div>
@@ -884,10 +1121,18 @@
             <div class="eyebrow">Participant Intake</div>
             <h2>Apollo AMV Tourney Qualifiers.</h2>
             <p class="subtitle">Submit your AT6 qualifier edit as a direct MP4 with anime/song info and a private team handle. Voters see the entry, not the team identity.</p>
+            <div class="countdown" aria-live="polite">
+              <div class="countdown-label" id="countdownLabel">Qualifier window closes in</div>
+              <div class="countdown-grid">
+                <div class="time-cell"><strong id="daysLeft">00</strong><span>Days</span></div>
+                <div class="time-cell"><strong id="hoursLeft">00</strong><span>Hours</span></div>
+                <div class="time-cell"><strong id="minutesLeft">00</strong><span>Minutes</span></div>
+                <div class="time-cell"><strong id="secondsLeft">00</strong><span>Seconds</span></div>
+              </div>
+            </div>
           </div>
           <div class="hero-art" aria-hidden="true">
             <canvas id="visualizer" width="720" height="405"></canvas>
-            <div class="poster-kicker">Apollo</div>
             <img class="hero-logo" src="apollo-logo.png" alt="">
             <div class="poster-stars">* * *</div>
           </div>
@@ -977,32 +1222,30 @@
           </div>
         </div>
 
-        <div class="grid two">
-          <div class="panel">
-            <div class="panel-head">
-              <div>
-                <h3>Current Seeds</h3>
-                <p>Export this list before locking your tourney bracket.</p>
-              </div>
-              <button id="copySeedsBtn">Copy Seeds</button>
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Current Seeds</h3>
+              <p>Export this list before locking your tourney bracket.</p>
             </div>
-            <div class="panel-body">
-              <div class="seed-table" id="seedTable"></div>
-            </div>
+            <button id="copySeedsBtn">Copy Seeds</button>
           </div>
-
-          <div class="panel">
-            <div class="panel-head">
-              <div>
-                <h3>Round 1 Pairings</h3>
-                <p>Ready for a 3-round top 8. Add a consolation or finals showcase if your event uses 4 rounds.</p>
-              </div>
-            </div>
-            <div class="panel-body">
-              <div class="bracket" id="bracketView"></div>
-            </div>
+          <div class="panel-body">
+            <div class="seed-table" id="seedTable"></div>
           </div>
         </div>
+      </section>
+
+      <section id="bracket" class="tab-page">
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Playoff Board</div>
+            <h2>AT6 qualifier bracket.</h2>
+            <p class="subtitle">A full-width playoff board for the current top 8. First-round matchups use 1v8, 4v5, 3v6, and 2v7 placement.</p>
+          </div>
+        </div>
+
+        <div class="bracket" id="bracketView"></div>
       </section>
 
     </main>
@@ -1031,6 +1274,7 @@
     const SUPABASE_STORAGE_URL = `${SUPABASE_PROJECT_URL}/storage/v1`;
     const VIDEO_BUCKET = "amv-videos";
     const EVENT_NAME = "AT6 Qualifiers";
+    const QUALIFIER_DEADLINE = "2026-06-01T23:59:00-07:00";
     const STORAGE_KEY = "amv-tourney-selector-v1";
     const VOTER_KEY = "amv-tourney-voter-id";
     const DB_NAME = "amv-tourney-media";
@@ -1076,6 +1320,11 @@
       submissionForm: document.getElementById("submissionForm"),
       submissionStatus: document.getElementById("submissionStatus"),
       videoFileInput: document.getElementById("videoFileInput"),
+      countdownLabel: document.getElementById("countdownLabel"),
+      daysLeft: document.getElementById("daysLeft"),
+      hoursLeft: document.getElementById("hoursLeft"),
+      minutesLeft: document.getElementById("minutesLeft"),
+      secondsLeft: document.getElementById("secondsLeft"),
       previewSeeds: document.getElementById("previewSeeds"),
       searchInput: document.getElementById("searchInput"),
       sortSelect: document.getElementById("sortSelect"),
@@ -1156,6 +1405,8 @@
     render();
     loadRemoteData();
     drawVisualizer();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
 
     async function supabaseFetch(path, options = {}) {
       const response = await fetch(`${SUPABASE_REST_URL}${path}`, {
@@ -1413,6 +1664,26 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
 
+    function updateCountdown() {
+      const deadline = new Date(QUALIFIER_DEADLINE).getTime();
+      const diff = Math.max(0, deadline - Date.now());
+      const totalSeconds = Math.floor(diff / 1000);
+      const days = Math.floor(totalSeconds / 86400);
+      const hours = Math.floor((totalSeconds % 86400) / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      el.daysLeft.textContent = padTime(days);
+      el.hoursLeft.textContent = padTime(hours);
+      el.minutesLeft.textContent = padTime(minutes);
+      el.secondsLeft.textContent = padTime(seconds);
+      el.countdownLabel.textContent = diff > 0 ? "Qualifier window closes in" : "Qualifier window is closed";
+    }
+
+    function padTime(value) {
+      return String(value).padStart(2, "0");
+    }
+
     function ensureVoter() {
       let id = localStorage.getItem(VOTER_KEY);
       if (!id) {
@@ -1589,6 +1860,7 @@
           playEntry(button.dataset.play);
         });
       });
+      hydrateVideoThumbs();
     }
 
     function entryCard(entry) {
@@ -1601,6 +1873,9 @@
         ? `MP4: ${escapeHtml(entry.fileName || "uploaded video")}`
         : entry.mediaType === "file" ? `Local MP4: ${escapeHtml(entry.fileName || "uploaded video")}` : "Embedded link";
       const notes = entry.notes ? `<div class="entry-notes">${escapeHtml(entry.notes)}</div>` : "";
+      const liveVideoThumb = entry.mediaType === "remote-file" && !entry.thumbnailUrl
+        ? `<video class="thumb-video" src="${escapeAttr(entry.link)}" muted playsinline preload="metadata"></video>`
+        : "";
       const rankButtons = Object.keys(rankPoints).map((rank) => `
         <button
           data-entry="${entry.id}"
@@ -1614,6 +1889,7 @@
         <article class="entry-card">
           <div class="entry-main">
             <a class="thumb" href="${escapeAttr(entry.link)}" target="_blank" rel="noopener" data-play="${entry.id}" style="--accent-a:${accent[0]}; --accent-b:${accent[1]}; ${entry.thumbnailUrl ? `background-image: linear-gradient(rgba(0,0,0,.08), rgba(0,0,0,.08)), url('${escapeAttr(entry.thumbnailUrl)}'); background-size: cover; background-position: center;` : ""}" aria-label="Play ${escapeAttr(entry.title)}">
+              ${liveVideoThumb}
               <span>Play</span>
             </a>
             <div>
@@ -1634,6 +1910,20 @@
           </div>
         </article>
       `;
+    }
+
+    function hydrateVideoThumbs() {
+      el.entryList.querySelectorAll(".thumb-video").forEach((video) => {
+        const seek = () => {
+          try {
+            video.currentTime = Math.min(1, Math.max(0, (video.duration || 2) / 5));
+          } catch (error) {
+            video.removeEventListener("loadedmetadata", seek);
+          }
+        };
+        video.addEventListener("loadedmetadata", seek, { once: true });
+        video.addEventListener("seeked", () => video.pause(), { once: true });
+      });
     }
 
     async function setRank(id, rank) {
@@ -1814,32 +2104,71 @@
     }
 
     function renderBracket(seeds) {
-      if (seeds.length < 8) {
-        el.bracketView.innerHTML = `<div class="empty">Need ${Math.max(0, 8 - seeds.length)} more seeded entries for a full top 8 bracket.</div>`;
-        return;
-      }
+      const firstRound = bracketPairs.map((pair, index) => `
+        <div class="playoff-match">
+          ${bracketTeam(pair[0], seeds[pair[0] - 1])}
+          ${bracketTeam(pair[1], seeds[pair[1] - 1])}
+        </div>
+      `).join("");
 
-      el.bracketView.innerHTML = bracketPairs.map((pair, index) => {
-        const a = seeds[pair[0] - 1];
-        const b = seeds[pair[1] - 1];
-        return `
-          <div class="match">
-            <div class="match-head"><span>Quarterfinal ${index + 1}</span><span>${pair[0]}v${pair[1]}</span></div>
-            ${matchTeam(pair[0], a)}
-            ${matchTeam(pair[1], b)}
+      el.bracketView.innerHTML = `
+        <div class="playoff-board">
+          <div class="playoff-title">
+            <div>
+              <span>AT6 Qualifiers</span>
+              <strong>Top 8 Bracket</strong>
+            </div>
+            <span>${seeds.length}/8 locked</span>
           </div>
-        `;
-      }).join("");
+          <div class="playoff-grid">
+            <div class="playoff-column">
+              <div class="round-label">First<br>Round</div>
+              ${firstRound}
+            </div>
+            <div class="playoff-column semis">
+              <div class="round-label">Semi<br>Finals</div>
+              <div class="advance-stack">
+                <div class="advance-slot">Winner</div>
+                <div class="advance-slot">Winner</div>
+              </div>
+              <div class="advance-stack">
+                <div class="advance-slot">Winner</div>
+                <div class="advance-slot">Winner</div>
+              </div>
+            </div>
+            <div class="playoff-column finals">
+              <div class="round-label">Finals</div>
+              <div class="advance-stack">
+                <div class="advance-slot">Finalist</div>
+                <div class="advance-slot">Finalist</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
     }
 
-    function matchTeam(seed, entry) {
+    function bracketTeam(seed, entry) {
+      if (!entry) {
+        return `
+          <div class="playoff-team">
+            <div class="team-badge">#${seed}</div>
+            <div>
+              <strong>Seed pending</strong>
+              <span>Awaiting points</span>
+            </div>
+            <div class="team-score">-</div>
+          </div>
+        `;
+      }
       return `
-        <div class="match-team">
-          <div class="rank">#${seed}</div>
+        <div class="playoff-team">
+          <div class="team-badge">#${seed}</div>
           <div>
             <strong>${escapeHtml(entry.title)}</strong>
-            <div class="entry-meta">${state.settings.revealTeams ? escapeHtml(entry.team) : "Anonymous team"} / ${scoreEntry(entry)} points</div>
+            <span>${scoreEntry(entry)} points</span>
           </div>
+          <div class="team-score">${scoreEntry(entry)}</div>
         </div>
       `;
     }
