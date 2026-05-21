@@ -1,0 +1,2029 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AMV Tourney Selector</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #111416;
+      --panel: #1a1f22;
+      --panel-2: #22282c;
+      --panel-3: #101315;
+      --line: #343d42;
+      --line-strong: #53616a;
+      --text: #f6f4ef;
+      --muted: #aeb8ba;
+      --soft: #d9dedc;
+      --cyan: #65d6cc;
+      --gold: #f0bd62;
+      --red: #ec6b66;
+      --green: #80d37a;
+      --blue: #78a7ff;
+      --ink: #090b0c;
+      --shadow: 0 24px 80px rgba(0, 0, 0, .36);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        linear-gradient(120deg, rgba(101, 214, 204, .10), transparent 32rem),
+        linear-gradient(315deg, rgba(240, 189, 98, .08), transparent 34rem),
+        var(--bg);
+      color: var(--text);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .12;
+      background-image:
+        linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.08) 1px, transparent 1px);
+      background-size: 46px 46px;
+      mask-image: linear-gradient(to bottom, #000, transparent 80%);
+    }
+
+    button, input, textarea, select {
+      font: inherit;
+    }
+
+    button {
+      border: 1px solid var(--line);
+      min-height: 40px;
+      border-radius: 8px;
+      background: #252c30;
+      color: var(--text);
+      padding: 0 13px;
+      cursor: pointer;
+      transition: transform .16s ease, border-color .16s ease, background .16s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+      background: #303940;
+    }
+
+    button:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #111619;
+      color: var(--text);
+      padding: 11px 12px;
+      outline: none;
+    }
+
+    input[type="file"] {
+      padding: 9px;
+    }
+
+    textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--cyan);
+      box-shadow: 0 0 0 3px rgba(101, 214, 204, .14);
+    }
+
+    label {
+      color: var(--muted);
+      display: grid;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 750;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    a { color: var(--cyan); }
+
+    .app-shell {
+      position: relative;
+      display: grid;
+      grid-template-columns: 284px minmax(0, 1fr);
+      min-height: 100vh;
+      z-index: 1;
+    }
+
+    aside {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+      padding: 22px;
+      border-right: 1px solid var(--line);
+      background: rgba(13, 16, 18, .82);
+      backdrop-filter: blur(18px);
+    }
+
+    main {
+      min-width: 0;
+      padding: 24px;
+    }
+
+    .brand {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(135deg, rgba(236, 107, 102, .95), transparent 47%),
+        linear-gradient(315deg, rgba(101, 214, 204, .9), transparent 47%),
+        #21272b;
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: var(--shadow);
+      font-weight: 950;
+      color: white;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.08;
+      letter-spacing: 0;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+
+    .nav button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+      min-height: 48px;
+      padding: 0 12px;
+    }
+
+    .nav button.active {
+      background: #303a3d;
+      border-color: #66747b;
+    }
+
+    .nav small {
+      color: var(--muted);
+      font-weight: 800;
+    }
+
+    .side-title {
+      margin: 22px 0 10px;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .mini-stat {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .mini-stat strong { color: var(--text); }
+
+    .notice {
+      margin-top: 20px;
+      padding: 13px;
+      border: 1px solid rgba(101, 214, 204, .24);
+      border-radius: 8px;
+      background: rgba(101, 214, 204, .08);
+      color: var(--soft);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .topbar {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 18px;
+      align-items: start;
+      margin-bottom: 22px;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 7px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(32px, 5vw, 64px);
+      line-height: .95;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      max-width: 760px;
+      margin: 12px 0 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 15px;
+    }
+
+    .hero-art {
+      width: min(32vw, 360px);
+      min-width: 260px;
+      aspect-ratio: 16 / 9;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #0d1011;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .hero-art canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .hero-art::after {
+      content: "AMV";
+      position: absolute;
+      right: 12px;
+      bottom: 9px;
+      color: rgba(255,255,255,.7);
+      font-weight: 950;
+      letter-spacing: .12em;
+      font-size: 12px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+    }
+
+    .toolbar .grow {
+      min-width: 220px;
+      flex: 1;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #151a1d;
+      padding: 7px 10px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .pill.good { color: var(--green); border-color: rgba(128, 211, 122, .34); }
+    .pill.warn { color: var(--gold); border-color: rgba(240, 189, 98, .38); }
+    .pill.hot { color: var(--red); border-color: rgba(236, 107, 102, .38); }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid.two {
+      grid-template-columns: minmax(0, 1fr) minmax(320px, .45fr);
+      align-items: start;
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      background: rgba(26, 31, 34, .86);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel-head {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .panel-head h3 {
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: 0;
+    }
+
+    .panel-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .panel-body {
+      padding: 16px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .form-grid .wide { grid-column: 1 / -1; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .primary {
+      background: var(--cyan);
+      border-color: var(--cyan);
+      color: #061112;
+      font-weight: 900;
+    }
+
+    .danger {
+      background: rgba(236, 107, 102, .13);
+      border-color: rgba(236, 107, 102, .44);
+      color: #ffc5c2;
+    }
+
+    .ghost {
+      background: transparent;
+    }
+
+    .entry-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .entry-card {
+      border: 1px solid var(--line);
+      background: #171c1f;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .entry-main {
+      display: grid;
+      grid-template-columns: 126px minmax(0, 1fr) auto;
+      gap: 14px;
+      padding: 14px;
+      align-items: center;
+    }
+
+    .thumb {
+      aspect-ratio: 16 / 9;
+      border-radius: 7px;
+      border: 1px solid rgba(255,255,255,.13);
+      background:
+        linear-gradient(135deg, var(--accent-a), transparent 54%),
+        linear-gradient(315deg, var(--accent-b), transparent 48%),
+        #0d1113;
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      color: rgba(255,255,255,.72);
+      font-weight: 950;
+    }
+
+    .thumb::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(90deg, rgba(255,255,255,.12) 0 2px, transparent 2px 14px);
+      opacity: .24;
+      transform: skewX(-16deg) scale(1.2);
+    }
+
+    .thumb span {
+      position: relative;
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 99px;
+      border: 1px solid rgba(255,255,255,.32);
+      background: rgba(0,0,0,.22);
+    }
+
+    .entry-title {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .entry-title strong {
+      font-size: 17px;
+      min-width: 0;
+    }
+
+    .entry-meta {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+
+    .entry-notes {
+      color: var(--soft);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .vote-box {
+      min-width: 92px;
+      display: grid;
+      gap: 8px;
+      justify-items: stretch;
+    }
+
+    .rank-buttons {
+      display: grid;
+      gap: 7px;
+      min-width: 112px;
+    }
+
+    .rank-buttons button {
+      min-height: 34px;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .rank-buttons button.selected {
+      background: var(--gold);
+      border-color: var(--gold);
+      color: #15100a;
+    }
+
+    .vote-count {
+      text-align: center;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 950;
+    }
+
+    .vote-label {
+      text-align: center;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .seed-table {
+      display: grid;
+      gap: 9px;
+    }
+
+    .seed-row {
+      display: grid;
+      grid-template-columns: 54px minmax(0, 1fr) 68px;
+      gap: 10px;
+      align-items: center;
+      border: 1px solid var(--line);
+      background: #151a1d;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .seed-num {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: #293236;
+      color: var(--gold);
+      font-weight: 950;
+      border: 1px solid rgba(255,255,255,.09);
+    }
+
+    .seed-row strong {
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .seed-row span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    .bracket {
+      display: grid;
+      gap: 10px;
+    }
+
+    .match {
+      border: 1px solid var(--line);
+      background: #14191b;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .match-head {
+      display: flex;
+      justify-content: space-between;
+      padding: 9px 11px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 850;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .match-team {
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr);
+      gap: 10px;
+      padding: 10px 11px;
+      align-items: center;
+    }
+
+    .match-team + .match-team { border-top: 1px solid rgba(255,255,255,.06); }
+
+    .rank {
+      color: var(--gold);
+      font-weight: 950;
+    }
+
+    .empty {
+      border: 1px dashed var(--line-strong);
+      border-radius: 8px;
+      padding: 22px;
+      color: var(--muted);
+      text-align: center;
+      background: rgba(255,255,255,.025);
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 20;
+      border: 1px solid rgba(101, 214, 204, .34);
+      background: #101618;
+      color: var(--text);
+      border-radius: 8px;
+      padding: 13px 14px;
+      max-width: min(420px, calc(100vw - 40px));
+      box-shadow: var(--shadow);
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity .18s ease, transform .18s ease;
+      font-size: 14px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .player-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      place-items: center;
+      padding: 20px;
+      background: rgba(3, 5, 6, .76);
+      backdrop-filter: blur(10px);
+    }
+
+    .player-modal.open {
+      display: grid;
+    }
+
+    .player-shell {
+      width: min(980px, 100%);
+      border: 1px solid var(--line-strong);
+      border-radius: 8px;
+      background: #0b0f11;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .player-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px;
+      border-bottom: 1px solid rgba(255,255,255,.1);
+    }
+
+    .player-head strong {
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .player-frame {
+      aspect-ratio: 16 / 9;
+      background: #050708;
+    }
+
+    .player-frame iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+
+    .player-frame video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      background: #050708;
+    }
+
+    .player-help {
+      padding: 10px 12px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.4;
+    }
+
+    .fallback-panel {
+      height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.45;
+    }
+
+    .tab-page { display: none; }
+    .tab-page.active { display: block; }
+
+    .admin-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .admin-item {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      border: 1px solid var(--line);
+      background: #151a1d;
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding: 12px 0;
+    }
+
+    .switch-row:last-child { border-bottom: 0; }
+
+    .switch-row span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .hidden-file {
+      display: none;
+    }
+
+    @media (max-width: 1020px) {
+      .app-shell { grid-template-columns: 1fr; }
+      aside {
+        position: relative;
+        height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .nav { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .topbar { grid-template-columns: 1fr; }
+      .hero-art { width: 100%; min-width: 0; }
+      .grid.two, .grid.three { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 680px) {
+      main, aside { padding: 16px; }
+      .nav { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .entry-main { grid-template-columns: 1fr; }
+      .vote-box { grid-template-columns: 1fr 1fr; align-items: center; }
+      .vote-box .vote-wrap { grid-column: 1; }
+      .rank-buttons { grid-column: 2; grid-row: 1; }
+      .form-grid { grid-template-columns: 1fr; }
+      .topbar h2 { font-size: 34px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside>
+      <div class="brand">
+        <div class="mark">A</div>
+        <div>
+          <h1 id="sideEventName">AMV Tourney Selector</h1>
+          <span>Anonymous entries, public voting, clean seeds</span>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Main">
+        <button class="active" data-tab="submit">Submit <small id="submitBadge">Open</small></button>
+        <button data-tab="vote">Vote <small id="voteBadge">Open</small></button>
+        <button data-tab="seeds">Seeds <small>Top 8</small></button>
+        <button data-tab="admin">Admin <small>Tools</small></button>
+      </nav>
+
+      <div class="side-title">Event Pulse</div>
+      <div class="mini-stat"><span>Entries</span><strong id="statEntries">0</strong></div>
+      <div class="mini-stat"><span>Ballots cast</span><strong id="statVotes">0</strong></div>
+      <div class="mini-stat"><span>Seed cutoff</span><strong id="statCutoff">0</strong></div>
+      <div class="mini-stat"><span>Format</span><strong id="statFormat">2v2</strong></div>
+
+      <div class="notice">
+        Public mode is connected to Supabase. MP4 uploads, entries, and ranked ballots sync online for anyone using the site.
+      </div>
+    </aside>
+
+    <main>
+      <section id="submit" class="tab-page active">
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Participant Intake</div>
+            <h2>Collect edits without names attached.</h2>
+            <p class="subtitle">Teams can submit a direct MP4 with anime/song info and a private team handle. Voters see the entry, not the team identity.</p>
+          </div>
+          <div class="hero-art" aria-hidden="true"><canvas id="visualizer" width="720" height="405"></canvas></div>
+        </div>
+
+        <div class="grid two">
+          <form id="submissionForm" class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>New Anonymous Entry</h3>
+                <p>The private team handle is for admins and exports. It stays hidden from the voting page unless reveal mode is on.</p>
+              </div>
+              <span class="pill good" id="submissionStatus">Open</span>
+            </div>
+            <div class="panel-body">
+              <div class="form-grid">
+                <label>Public edit title
+                  <input id="titleInput" required maxlength="70" placeholder="Example: Neon Reversal">
+                </label>
+                <label>Private team handle
+                  <input id="teamInput" required maxlength="70" placeholder="Example: Kira + Vex">
+                </label>
+                <label>Anime / source
+                  <input id="sourceInput" maxlength="80" placeholder="Example: Jujutsu Kaisen">
+                </label>
+                <label>Song / audio
+                  <input id="songInput" maxlength="80" placeholder="Example: Artist - Track">
+                </label>
+                <label class="wide">Upload MP4 for local testing
+                  <input id="videoFileInput" type="file" accept="video/mp4,video/webm,video/quicktime">
+                </label>
+                <label class="wide">Optional backup video link
+                  <input id="linkInput" type="url" placeholder="Optional: https://streamable.com/... or https://youtu.be/...">
+                </label>
+                <label class="wide">Editor notes
+                  <textarea id="notesInput" maxlength="240" placeholder="Optional theme, content warnings, or judging notes"></textarea>
+                </label>
+              </div>
+              <div class="actions">
+                <button class="primary" type="submit">Submit Entry</button>
+                <button class="ghost" type="button" id="loadDemoBtn">Load Demo Entries</button>
+              </div>
+            </div>
+          </form>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>How The Selection Works</h3>
+                <p>Designed for community qualifiers before a 2 on 2 tournament.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="seed-table" id="previewSeeds"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="vote" class="tab-page">
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Community Voting</div>
+            <h2>Let the strongest edits rise.</h2>
+            <p class="subtitle">Each browser gets one ranked ballot: 1st place is 3 points, 2nd place is 2 points, and 3rd place is 1 point. The leaderboard updates instantly.</p>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <input class="grow" id="searchInput" placeholder="Search entries, anime, song, or notes">
+          <select id="sortSelect" aria-label="Sort entries">
+            <option value="votes">Most points</option>
+            <option value="newest">Newest first</option>
+            <option value="title">Title A-Z</option>
+          </select>
+          <span class="pill" id="voterPill">Voter ready</span>
+        </div>
+
+        <div id="entryList" class="entry-list"></div>
+      </section>
+
+      <section id="seeds" class="tab-page">
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Top 8 Seeding</div>
+            <h2>Build the bracket from points.</h2>
+            <p class="subtitle">The top eight are ranked by weighted ballot points, then submission time as a tiebreaker. Quarterfinal pairings use standard 1v8, 4v5, 3v6, 2v7 placement.</p>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Current Seeds</h3>
+                <p>Export this list before locking your tourney bracket.</p>
+              </div>
+              <button id="copySeedsBtn">Copy Seeds</button>
+            </div>
+            <div class="panel-body">
+              <div class="seed-table" id="seedTable"></div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Round 1 Pairings</h3>
+                <p>Ready for a 3-round top 8. Add a consolation or finals showcase if your event uses 4 rounds.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="bracket" id="bracketView"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="admin" class="tab-page">
+        <div class="topbar">
+          <div>
+            <div class="eyebrow">Organizer Controls</div>
+            <h2>Run the qualifier cleanly.</h2>
+            <p class="subtitle">Rename the event, close submissions, pause voting, reveal teams when voting ends, export your data, or prune test entries.</p>
+          </div>
+        </div>
+
+        <div class="grid two">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Event Settings</h3>
+                <p>These update the public pages immediately.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="form-grid">
+                <label class="wide">Event name
+                  <input id="eventNameInput">
+                </label>
+                <label>Seed count
+                  <select id="seedCountInput">
+                    <option value="8">Top 8</option>
+                    <option value="16">Top 16</option>
+                  </select>
+                </label>
+                <label>Tourney rounds
+                  <select id="roundCountInput">
+                    <option value="3">3 rounds</option>
+                    <option value="4">4 rounds</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="switch-row">
+                <div><strong>Accept submissions</strong><span>Turn off when your intake window closes.</span></div>
+                <button id="toggleSubmissionsBtn"></button>
+              </div>
+              <div class="switch-row">
+                <div><strong>Accept ballots</strong><span>Turn off while you verify links or lock results.</span></div>
+                <button id="toggleVotingBtn"></button>
+              </div>
+              <div class="switch-row">
+                <div><strong>Reveal team handles</strong><span>Keep off during anonymous voting.</span></div>
+                <button id="toggleRevealBtn"></button>
+              </div>
+
+              <div class="actions">
+                <button class="primary" id="saveSettingsBtn">Save Settings</button>
+                <button id="exportBtn">Export JSON</button>
+                <button id="importBtn">Import JSON</button>
+                <input class="hidden-file" id="importFile" type="file" accept="application/json">
+                <button class="danger" id="clearVotesBtn">Clear Ballots</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Submission Admin</h3>
+                <p>Remove duplicates, broken links, or accidental tests.</p>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div id="adminList" class="admin-list"></div>
+              <div class="actions">
+                <button class="danger" id="resetAllBtn">Reset Everything</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="player-modal" id="playerModal" aria-hidden="true">
+    <div class="player-shell" role="dialog" aria-modal="true" aria-labelledby="playerTitle">
+      <div class="player-head">
+        <strong id="playerTitle">Preview</strong>
+        <div class="actions" style="margin:0">
+          <button type="button" id="reloadPlayerBtn">Reload</button>
+          <button type="button" id="closePlayerBtn">Close</button>
+        </div>
+      </div>
+      <div class="player-frame" id="playerFrame"></div>
+      <div class="player-help">Direct MP4 uploads play privately inside this page. YouTube and Streamable embeds can still be blocked by the host, so MP4 is the cleaner anonymous option.</div>
+    </div>
+  </div>
+
+  <script>
+    const SUPABASE_PROJECT_URL = "https://jvmkehfuzxkljmeeejrf.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_sB9aYQ2BBZun9JgYvPOAUQ_l2DODjDX";
+    const SUPABASE_REST_URL = `${SUPABASE_PROJECT_URL}/rest/v1`;
+    const SUPABASE_STORAGE_URL = `${SUPABASE_PROJECT_URL}/storage/v1`;
+    const VIDEO_BUCKET = "amv-videos";
+    const STORAGE_KEY = "amv-tourney-selector-v1";
+    const VOTER_KEY = "amv-tourney-voter-id";
+    const DB_NAME = "amv-tourney-media";
+    const DB_STORE = "videos";
+    const rankPoints = { first: 3, second: 2, third: 1 };
+    const rankLabels = { first: "1st +3", second: "2nd +2", third: "3rd +1" };
+    const bracketPairs = [[1, 8], [4, 5], [3, 6], [2, 7]];
+    const accents = [
+      ["#65d6cc", "#ec6b66"],
+      ["#f0bd62", "#78a7ff"],
+      ["#80d37a", "#ec6b66"],
+      ["#c38cff", "#65d6cc"],
+      ["#ff8c66", "#78a7ff"],
+      ["#f0bd62", "#80d37a"]
+    ];
+
+    const demoEntries = [
+      ["Static Heartbeat", "Team Afterimage", "Cyberpunk: Edgerunners", "M83 - Midnight City", "https://youtu.be/example1", "Fast-paced character drama with glitch transitions."],
+      ["Bloom Circuit", "Team Celadon", "Vivy", "Porter Robinson - Something Comforting", "https://youtu.be/example2", "Color-focused build with a soft second half."],
+      ["Crownless", "Team Night Drive", "Fate series", "Bring Me The Horizon - Kingslayer", "https://youtu.be/example3", "Action sync entry with heavy impacts."],
+      ["After School Thunder", "Team VHS Kiss", "Chainsaw Man", "Carpenter Brut - Turbo Killer", "https://youtu.be/example4", "Retro texture and hard cuts."],
+      ["Blue Hour Protocol", "Team Signal Loss", "86", "CHVRCHES - Clearest Blue", "https://youtu.be/example5", "Emotional rise into a combat finale."],
+      ["Glass Arena", "Team Render Queue", "Promare", "Madeon - Mania", "https://youtu.be/example6", "Bright motion graphics and match cuts."],
+      ["Low Orbit", "Team Bitrate", "Gundam Witch", "KLOUD - Exit Alive", "https://youtu.be/example7", "Mechanical rhythm piece."],
+      ["Honey Blade", "Team Masking Layer", "Demon Slayer", "Reol - Hibikase", "https://youtu.be/example8", "Dance/action blend with saturated effects."],
+      ["Echo Error", "Team Stardust", "Mob Psycho 100", "The Score - Revolution", "https://youtu.be/example9", "Comedy timing into heavy climax."],
+      ["Redline Prayer", "Team Keyframe", "Akudama Drive", "Justice - Genesis", "https://youtu.be/example10", "Speed edit with bold typography."]
+    ];
+
+    const state = loadState();
+    const voterId = ensureVoter();
+    let activeTab = "submit";
+    let currentPlayerEntryId = "";
+
+    const el = {
+      sideEventName: document.getElementById("sideEventName"),
+      submitBadge: document.getElementById("submitBadge"),
+      voteBadge: document.getElementById("voteBadge"),
+      statEntries: document.getElementById("statEntries"),
+      statVotes: document.getElementById("statVotes"),
+      statCutoff: document.getElementById("statCutoff"),
+      statFormat: document.getElementById("statFormat"),
+      submissionForm: document.getElementById("submissionForm"),
+      submissionStatus: document.getElementById("submissionStatus"),
+      videoFileInput: document.getElementById("videoFileInput"),
+      previewSeeds: document.getElementById("previewSeeds"),
+      searchInput: document.getElementById("searchInput"),
+      sortSelect: document.getElementById("sortSelect"),
+      voterPill: document.getElementById("voterPill"),
+      entryList: document.getElementById("entryList"),
+      seedTable: document.getElementById("seedTable"),
+      bracketView: document.getElementById("bracketView"),
+      eventNameInput: document.getElementById("eventNameInput"),
+      seedCountInput: document.getElementById("seedCountInput"),
+      roundCountInput: document.getElementById("roundCountInput"),
+      toggleSubmissionsBtn: document.getElementById("toggleSubmissionsBtn"),
+      toggleVotingBtn: document.getElementById("toggleVotingBtn"),
+      toggleRevealBtn: document.getElementById("toggleRevealBtn"),
+      saveSettingsBtn: document.getElementById("saveSettingsBtn"),
+      exportBtn: document.getElementById("exportBtn"),
+      importBtn: document.getElementById("importBtn"),
+      importFile: document.getElementById("importFile"),
+      clearVotesBtn: document.getElementById("clearVotesBtn"),
+      resetAllBtn: document.getElementById("resetAllBtn"),
+      adminList: document.getElementById("adminList"),
+      copySeedsBtn: document.getElementById("copySeedsBtn"),
+      loadDemoBtn: document.getElementById("loadDemoBtn"),
+      toast: document.getElementById("toast"),
+      playerModal: document.getElementById("playerModal"),
+      playerTitle: document.getElementById("playerTitle"),
+      playerFrame: document.getElementById("playerFrame"),
+      reloadPlayerBtn: document.getElementById("reloadPlayerBtn"),
+      closePlayerBtn: document.getElementById("closePlayerBtn")
+    };
+
+    document.querySelectorAll("[data-tab]").forEach((button) => {
+      button.addEventListener("click", () => switchTab(button.dataset.tab));
+    });
+
+    el.submissionForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!state.settings.submissionsOpen) {
+        showToast("Submissions are currently closed.");
+        return;
+      }
+      const file = el.videoFileInput.files[0];
+      const link = document.getElementById("linkInput").value.trim();
+      if (!file) {
+        showToast("Upload an MP4 for the public version.");
+        return;
+      }
+      el.submissionForm.querySelector("button[type='submit']").disabled = true;
+
+      const entry = {
+        title: document.getElementById("titleInput").value.trim(),
+        source: document.getElementById("sourceInput").value.trim(),
+        song: document.getElementById("songInput").value.trim(),
+        link,
+        mediaType: "remote-file",
+        fileName: file.name,
+        fileSize: file.size,
+        notes: document.getElementById("notesInput").value.trim(),
+        createdAt: new Date().toISOString(),
+        accent: state.entries.length % accents.length
+      };
+
+      try {
+        entry.videoPath = await uploadVideoToSupabase(file);
+        const savedEntry = await createRemoteSubmission(entry, document.getElementById("teamInput").value.trim());
+        state.entries.unshift(savedEntry);
+        saveState();
+        el.submissionForm.reset();
+        showToast("Entry uploaded and submitted anonymously.");
+        render();
+        switchTab("vote");
+      } catch (error) {
+        console.error(error);
+        showToast("Upload failed. Check Storage bucket name and policies.");
+      } finally {
+        el.submissionForm.querySelector("button[type='submit']").disabled = false;
+      }
+    });
+
+    el.searchInput.addEventListener("input", renderEntries);
+    el.sortSelect.addEventListener("change", renderEntries);
+    el.loadDemoBtn.addEventListener("click", loadDemo);
+    el.saveSettingsBtn.addEventListener("click", saveSettings);
+    el.toggleSubmissionsBtn.addEventListener("click", () => toggleSetting("submissionsOpen"));
+    el.toggleVotingBtn.addEventListener("click", () => toggleSetting("votingOpen"));
+    el.toggleRevealBtn.addEventListener("click", () => toggleSetting("revealTeams"));
+    el.exportBtn.addEventListener("click", exportData);
+    el.importBtn.addEventListener("click", () => el.importFile.click());
+    el.importFile.addEventListener("change", importData);
+    el.clearVotesBtn.addEventListener("click", clearVotes);
+    el.resetAllBtn.addEventListener("click", resetAll);
+    el.copySeedsBtn.addEventListener("click", copySeeds);
+    el.reloadPlayerBtn.addEventListener("click", reloadPlayer);
+    el.closePlayerBtn.addEventListener("click", closePlayer);
+    el.playerModal.addEventListener("click", (event) => {
+      if (event.target === el.playerModal) closePlayer();
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closePlayer();
+    });
+
+    render();
+    loadRemoteData();
+    drawVisualizer();
+
+    async function supabaseFetch(path, options = {}) {
+      const response = await fetch(`${SUPABASE_REST_URL}${path}`, {
+        ...options,
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": "application/json",
+          ...(options.headers || {})
+        }
+      });
+
+      if (!response.ok) {
+        const detail = await response.text();
+        throw new Error(detail || `Supabase request failed: ${response.status}`);
+      }
+
+      if (response.status === 204) return null;
+      const text = await response.text();
+      return text ? JSON.parse(text) : null;
+    }
+
+    async function loadRemoteData() {
+      try {
+        const [entries, ballots] = await Promise.all([
+          supabaseFetch("/entries?select=*&is_approved=eq.true&order=created_at.desc"),
+          supabaseFetch("/ballots?select=*")
+        ]);
+        state.entries = entries.map(remoteEntryToLocal);
+        state.ballots = remoteBallotsToLocal(ballots);
+        saveState();
+        render();
+        showToast("Synced with Supabase.");
+      } catch (error) {
+        console.error(error);
+        showToast("Could not sync Supabase yet. Check bucket policies if uploads fail.");
+      }
+    }
+
+    function remoteEntryToLocal(entry, index = 0) {
+      return {
+        id: entry.id,
+        title: entry.title,
+        team: "",
+        source: entry.anime_source || "",
+        song: entry.song_audio || "",
+        notes: entry.notes || "",
+        link: publicVideoUrl(entry.video_path),
+        videoPath: entry.video_path,
+        mediaType: "remote-file",
+        fileName: entry.file_name || "",
+        fileSize: entry.file_size || 0,
+        createdAt: entry.created_at,
+        accent: index % accents.length
+      };
+    }
+
+    function remoteBallotsToLocal(ballots) {
+      return ballots.reduce((result, ballot) => {
+        result[ballot.voter_id] = {
+          first: ballot.first_entry_id || undefined,
+          second: ballot.second_entry_id || undefined,
+          third: ballot.third_entry_id || undefined
+        };
+        Object.keys(result[ballot.voter_id]).forEach((rank) => {
+          if (!result[ballot.voter_id][rank]) delete result[ballot.voter_id][rank];
+        });
+        return result;
+      }, {});
+    }
+
+    function publicVideoUrl(path) {
+      return `${SUPABASE_STORAGE_URL}/object/public/${VIDEO_BUCKET}/${encodeURIComponent(path).replace(/%2F/g, "/")}`;
+    }
+
+    async function uploadVideoToSupabase(file) {
+      const extension = (file.name.split(".").pop() || "mp4").toLowerCase().replace(/[^a-z0-9]/g, "") || "mp4";
+      const path = `${crypto.randomUUID ? crypto.randomUUID() : Date.now()}.${extension}`;
+      const response = await fetch(`${SUPABASE_STORAGE_URL}/object/${VIDEO_BUCKET}/${path}`, {
+        method: "POST",
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: `Bearer ${SUPABASE_KEY}`,
+          "Content-Type": file.type || "video/mp4",
+          "x-upsert": "false"
+        },
+        body: file
+      });
+
+      if (!response.ok) {
+        const detail = await response.text();
+        throw new Error(detail || "Video upload failed");
+      }
+      return path;
+    }
+
+    async function createRemoteSubmission(entry, teamHandle) {
+      const inserted = await supabaseFetch("/entries", {
+        method: "POST",
+        headers: { Prefer: "return=representation" },
+        body: JSON.stringify({
+          title: entry.title,
+          anime_source: entry.source,
+          song_audio: entry.song,
+          notes: entry.notes,
+          video_path: entry.videoPath,
+          file_name: entry.fileName,
+          file_size: entry.fileSize,
+          is_approved: true
+        })
+      });
+
+      const remoteEntry = inserted[0];
+      await supabaseFetch("/entry_secrets", {
+        method: "POST",
+        body: JSON.stringify({
+          entry_id: remoteEntry.id,
+          team_handle: teamHandle
+        })
+      });
+      return remoteEntryToLocal(remoteEntry);
+    }
+
+    async function saveRemoteBallot(ballot) {
+      const existing = await supabaseFetch(`/ballots?select=id&voter_id=eq.${encodeURIComponent(voterId)}&limit=1`);
+      const payload = {
+        voter_id: voterId,
+        first_entry_id: ballot.first || null,
+        second_entry_id: ballot.second || null,
+        third_entry_id: ballot.third || null
+      };
+
+      if (existing.length) {
+        await supabaseFetch(`/ballots?id=eq.${existing[0].id}`, {
+          method: "PATCH",
+          body: JSON.stringify(payload)
+        });
+      } else {
+        await supabaseFetch("/ballots", {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+      }
+    }
+
+    function loadState() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          const entries = Array.isArray(parsed.entries) ? parsed.entries : [];
+          return {
+            settings: { ...defaultSettings(), ...parsed.settings },
+            entries,
+            ballots: parsed.ballots && typeof parsed.ballots === "object" ? parsed.ballots : migrateLegacyVotes(entries)
+          };
+        } catch (error) {
+          console.warn("Could not parse saved data", error);
+        }
+      }
+      return { settings: defaultSettings(), entries: [], ballots: {} };
+    }
+
+    function defaultSettings() {
+      return {
+        eventName: "AMV Tourney Selector",
+        seedCount: 8,
+        roundCount: 3,
+        submissionsOpen: true,
+        votingOpen: true,
+        revealTeams: false
+      };
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function ensureVoter() {
+      let id = localStorage.getItem(VOTER_KEY);
+      if (!id) {
+        id = crypto.randomUUID ? crypto.randomUUID() : "voter-" + Date.now();
+        localStorage.setItem(VOTER_KEY, id);
+      }
+      return id;
+    }
+
+    function openVideoDb() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, 1);
+        request.onupgradeneeded = () => {
+          request.result.createObjectStore(DB_STORE);
+        };
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function saveVideoFile(id, file) {
+      const db = await openVideoDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(DB_STORE, "readwrite");
+        tx.objectStore(DB_STORE).put(file, id);
+        tx.oncomplete = () => {
+          db.close();
+          resolve();
+        };
+        tx.onerror = () => {
+          db.close();
+          reject(tx.error);
+        };
+      });
+    }
+
+    async function getVideoFile(id) {
+      const db = await openVideoDb();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction(DB_STORE, "readonly");
+        const request = tx.objectStore(DB_STORE).get(id);
+        request.onsuccess = () => resolve(request.result);
+        request.onerror = () => reject(request.error);
+        tx.oncomplete = () => db.close();
+      });
+    }
+
+    async function deleteVideoFile(id) {
+      const db = await openVideoDb();
+      return new Promise((resolve) => {
+        const tx = db.transaction(DB_STORE, "readwrite");
+        tx.objectStore(DB_STORE).delete(id);
+        tx.oncomplete = () => {
+          db.close();
+          resolve();
+        };
+        tx.onerror = () => {
+          db.close();
+          resolve();
+        };
+      });
+    }
+
+    async function clearVideoFiles() {
+      const db = await openVideoDb();
+      return new Promise((resolve) => {
+        const tx = db.transaction(DB_STORE, "readwrite");
+        tx.objectStore(DB_STORE).clear();
+        tx.oncomplete = () => {
+          db.close();
+          resolve();
+        };
+        tx.onerror = () => {
+          db.close();
+          resolve();
+        };
+      });
+    }
+
+    function scoreEntry(entry) {
+      return Object.values(state.ballots || {}).reduce((total, ballot) => {
+        return total + Object.entries(rankPoints).reduce((points, [rank, value]) => {
+          return points + (ballot[rank] === entry.id ? value : 0);
+        }, 0);
+      }, 0);
+    }
+
+    function getEntryRank(entryId) {
+      const ballot = state.ballots[voterId] || {};
+      return Object.keys(rankPoints).find((rank) => ballot[rank] === entryId) || "";
+    }
+
+    function migrateLegacyVotes(entries) {
+      const ballots = {};
+      entries.forEach((entry) => {
+        if (!Array.isArray(entry.votes)) return;
+        entry.votes.forEach((legacyVoter) => {
+          const ballot = ballots[legacyVoter] || {};
+          if (!ballot.third) ballot.third = entry.id;
+          else if (!ballot.second) ballot.second = entry.id;
+          else if (!ballot.first) ballot.first = entry.id;
+          ballots[legacyVoter] = ballot;
+        });
+      });
+      return ballots;
+    }
+
+    function switchTab(tab) {
+      activeTab = tab;
+      document.querySelectorAll("[data-tab]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.tab === tab);
+      });
+      document.querySelectorAll(".tab-page").forEach((page) => {
+        page.classList.toggle("active", page.id === tab);
+      });
+      render();
+    }
+
+    function render() {
+      const seeds = getSeeds();
+      el.sideEventName.textContent = state.settings.eventName;
+      el.submitBadge.textContent = state.settings.submissionsOpen ? "Open" : "Closed";
+      el.voteBadge.textContent = state.settings.votingOpen ? "Open" : "Closed";
+      el.submissionStatus.textContent = state.settings.submissionsOpen ? "Open" : "Closed";
+      el.submissionStatus.className = "pill " + (state.settings.submissionsOpen ? "good" : "hot");
+      el.statEntries.textContent = state.entries.length;
+      el.statVotes.textContent = Object.keys(state.ballots).length;
+      el.statCutoff.textContent = seeds[state.settings.seedCount - 1] ? scoreEntry(seeds[state.settings.seedCount - 1]) : 0;
+      el.statFormat.textContent = `${state.settings.roundCount} rounds`;
+      el.voterPill.textContent = "Voter " + voterId.slice(0, 6).toUpperCase();
+
+      el.eventNameInput.value = state.settings.eventName;
+      el.seedCountInput.value = String(state.settings.seedCount);
+      el.roundCountInput.value = String(state.settings.roundCount);
+      updateToggleLabels();
+
+      renderPreview(seeds);
+      renderEntries();
+      renderSeeds(seeds);
+      renderBracket(seeds);
+      renderAdmin();
+    }
+
+    function renderPreview(seeds) {
+      if (!state.entries.length) {
+        el.previewSeeds.innerHTML = `<div class="empty">No entries yet. Load demo data or submit the first edit.</div>`;
+        return;
+      }
+      el.previewSeeds.innerHTML = seeds.slice(0, 5).map((entry, index) => seedRow(entry, index + 1)).join("");
+    }
+
+    function renderEntries() {
+      const query = el.searchInput.value.trim().toLowerCase();
+      const sort = el.sortSelect.value;
+      let entries = [...state.entries];
+
+      if (query) {
+        entries = entries.filter((entry) => [entry.title, entry.team, entry.source, entry.song, entry.notes]
+          .some((value) => String(value || "").toLowerCase().includes(query)));
+      }
+
+      entries.sort((a, b) => {
+        if (sort === "newest") return new Date(b.createdAt) - new Date(a.createdAt);
+        if (sort === "title") return a.title.localeCompare(b.title);
+        return scoreEntry(b) - scoreEntry(a) || new Date(a.createdAt) - new Date(b.createdAt);
+      });
+
+      if (!entries.length) {
+        el.entryList.innerHTML = `<div class="empty">No entries match this view.</div>`;
+        return;
+      }
+
+      el.entryList.innerHTML = entries.map((entry) => entryCard(entry)).join("");
+      el.entryList.querySelectorAll("[data-rank]").forEach((button) => {
+        button.addEventListener("click", () => setRank(button.dataset.entry, button.dataset.rank));
+      });
+      el.entryList.querySelectorAll("[data-play]").forEach((button) => {
+        button.addEventListener("click", (event) => {
+          event.preventDefault();
+          playEntry(button.dataset.play);
+        });
+      });
+    }
+
+    function entryCard(entry) {
+      const currentRank = getEntryRank(entry.id);
+      const score = scoreEntry(entry);
+      const accent = accents[entry.accent % accents.length] || accents[0];
+      const teamText = state.settings.revealTeams ? `<span class="pill warn">${escapeHtml(entry.team)}</span>` : "";
+      const source = [entry.source, entry.song].filter(Boolean).map(escapeHtml).join(" / ") || "Source details hidden";
+      const mediaText = entry.mediaType === "remote-file"
+        ? `MP4: ${escapeHtml(entry.fileName || "uploaded video")}`
+        : entry.mediaType === "file" ? `Local MP4: ${escapeHtml(entry.fileName || "uploaded video")}` : "Embedded link";
+      const notes = entry.notes ? `<div class="entry-notes">${escapeHtml(entry.notes)}</div>` : "";
+      const rankButtons = Object.keys(rankPoints).map((rank) => `
+        <button
+          data-entry="${entry.id}"
+          data-rank="${rank}"
+          class="${currentRank === rank ? "selected" : ""}"
+          ${state.settings.votingOpen ? "" : "disabled"}
+        >${rankLabels[rank]}</button>
+      `).join("");
+
+      return `
+        <article class="entry-card">
+          <div class="entry-main">
+            <a class="thumb" href="${escapeAttr(entry.link)}" target="_blank" rel="noopener" data-play="${entry.id}" style="--accent-a:${accent[0]}; --accent-b:${accent[1]};" aria-label="Play ${escapeAttr(entry.title)}">
+              <span>Play</span>
+            </a>
+            <div>
+              <div class="entry-title">
+                <strong>${escapeHtml(entry.title)}</strong>
+                ${teamText}
+              </div>
+              <div class="entry-meta">${source} / ${mediaText}</div>
+              ${notes}
+            </div>
+            <div class="vote-box">
+              <div class="vote-wrap">
+                <div class="vote-count">${score}</div>
+                <div class="vote-label">points</div>
+              </div>
+              <div class="rank-buttons">${rankButtons}</div>
+            </div>
+          </div>
+        </article>
+      `;
+    }
+
+    async function setRank(id, rank) {
+      if (!state.settings.votingOpen) {
+        showToast("Voting is currently closed.");
+        return;
+      }
+      const entry = state.entries.find((item) => item.id === id);
+      if (!entry) return;
+      const ballot = { ...(state.ballots[voterId] || {}) };
+      const wasSameChoice = ballot[rank] === id;
+
+      Object.keys(ballot).forEach((existingRank) => {
+        if (ballot[existingRank] === id || existingRank === rank) {
+          delete ballot[existingRank];
+        }
+      });
+
+      if (wasSameChoice) {
+        showToast(`${rankLabels[rank]} removed.`);
+      } else {
+        ballot[rank] = id;
+        showToast(`${rankLabels[rank]} assigned.`);
+      }
+
+      if (Object.keys(ballot).length) state.ballots[voterId] = ballot;
+      else delete state.ballots[voterId];
+
+      try {
+        await saveRemoteBallot(state.ballots[voterId] || {});
+        saveState();
+        render();
+      } catch (error) {
+        console.error(error);
+        showToast("Could not save ballot online.");
+        await loadRemoteData();
+      }
+    }
+
+    async function playEntry(id) {
+      const entry = state.entries.find((item) => item.id === id);
+      if (!entry) return;
+      currentPlayerEntryId = id;
+      el.playerTitle.textContent = entry.title;
+
+      if (entry.mediaType === "remote-file") {
+        el.playerFrame.innerHTML = `<video src="${escapeAttr(entry.link)}" controls playsinline autoplay></video>`;
+        el.playerModal.classList.add("open");
+        el.playerModal.setAttribute("aria-hidden", "false");
+        return;
+      }
+
+      if (entry.mediaType === "file") {
+        try {
+          const file = await getVideoFile(entry.id);
+          if (!file) {
+            el.playerFrame.innerHTML = `<div class="fallback-panel">This MP4 is not available in this browser. Local uploads stay on the device that uploaded them.</div>`;
+          } else {
+            const src = URL.createObjectURL(file);
+            el.playerFrame.innerHTML = `<video src="${escapeAttr(src)}" controls playsinline autoplay></video>`;
+            const video = el.playerFrame.querySelector("video");
+            video.addEventListener("loadeddata", () => URL.revokeObjectURL(src), { once: true });
+          }
+          el.playerModal.classList.add("open");
+          el.playerModal.setAttribute("aria-hidden", "false");
+        } catch (error) {
+          showToast("The uploaded MP4 could not be opened.");
+        }
+        return;
+      }
+
+      const embedUrl = getEmbedUrl(entry.link);
+
+      if (!embedUrl) {
+        el.playerTitle.textContent = entry.title;
+        el.playerFrame.innerHTML = `<div class="fallback-panel">This link cannot be embedded anonymously. Ask for an MP4 upload or a supported YouTube/Streamable link.</div>`;
+        el.playerModal.classList.add("open");
+        el.playerModal.setAttribute("aria-hidden", "false");
+        return;
+      }
+
+      renderPlayerFrame(entry, embedUrl);
+      el.playerModal.classList.add("open");
+      el.playerModal.setAttribute("aria-hidden", "false");
+    }
+
+    function reloadPlayer() {
+      if (!currentPlayerEntryId) return;
+      const entry = state.entries.find((item) => item.id === currentPlayerEntryId);
+      if (!entry) return;
+      if (entry.mediaType === "remote-file" || entry.mediaType === "file") {
+        playEntry(entry.id);
+        return;
+      }
+      const embedUrl = getEmbedUrl(entry.link);
+      if (embedUrl) {
+        renderPlayerFrame(entry, embedUrl, true);
+        showToast("Player reloaded.");
+      }
+    }
+
+    function renderPlayerFrame(entry, embedUrl, cacheBust = false) {
+      const separator = embedUrl.includes("?") ? "&" : "?";
+      const src = cacheBust ? `${embedUrl}${separator}t=${Date.now()}` : embedUrl;
+      el.playerFrame.innerHTML = "";
+      setTimeout(() => {
+        el.playerFrame.innerHTML = `<iframe src="${escapeAttr(src)}" title="${escapeAttr(entry.title)}" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+      }, 0);
+    }
+
+    function closePlayer() {
+      const video = el.playerFrame.querySelector("video");
+      if (video && video.src.startsWith("blob:")) {
+        URL.revokeObjectURL(video.src);
+      }
+      el.playerModal.classList.remove("open");
+      el.playerModal.setAttribute("aria-hidden", "true");
+      el.playerFrame.innerHTML = "";
+      currentPlayerEntryId = "";
+    }
+
+    function getEmbedUrl(rawUrl) {
+      try {
+        const url = new URL(rawUrl);
+        const host = url.hostname.replace(/^www\./, "").toLowerCase();
+
+        if (host === "youtu.be") {
+          const id = url.pathname.split("/").filter(Boolean)[0];
+          return id ? `https://www.youtube.com/embed/${id}` : "";
+        }
+
+        if (host === "youtube.com" || host === "m.youtube.com") {
+          if (url.pathname.startsWith("/shorts/")) {
+            const id = url.pathname.split("/").filter(Boolean)[1];
+            return id ? `https://www.youtube.com/embed/${id}` : "";
+          }
+          const id = url.searchParams.get("v");
+          return id ? `https://www.youtube.com/embed/${id}` : "";
+        }
+
+        if (host === "streamable.com") {
+          const parts = url.pathname.split("/").filter(Boolean);
+          const id = parts[0] === "e" ? parts[1] : parts[0];
+          return id ? `https://streamable.com/e/${id}` : "";
+        }
+      } catch (error) {
+        return "";
+      }
+      return "";
+    }
+
+    function getSeeds() {
+      return [...state.entries].sort((a, b) => {
+        return scoreEntry(b) - scoreEntry(a) || new Date(a.createdAt) - new Date(b.createdAt);
+      }).slice(0, state.settings.seedCount);
+    }
+
+    function renderSeeds(seeds) {
+      if (!seeds.length) {
+        el.seedTable.innerHTML = `<div class="empty">Seeds will appear once entries are submitted.</div>`;
+        return;
+      }
+      el.seedTable.innerHTML = seeds.map((entry, index) => seedRow(entry, index + 1)).join("");
+    }
+
+    function seedRow(entry, seed) {
+      const team = state.settings.revealTeams ? `Team: ${escapeHtml(entry.team)}` : "Anonymous team";
+      return `
+        <div class="seed-row">
+          <div class="seed-num">${seed}</div>
+          <div>
+            <strong>${escapeHtml(entry.title)}</strong>
+            <span>${team}</span>
+          </div>
+          <strong>${scoreEntry(entry)}</strong>
+        </div>
+      `;
+    }
+
+    function renderBracket(seeds) {
+      if (seeds.length < 8) {
+        el.bracketView.innerHTML = `<div class="empty">Need ${Math.max(0, 8 - seeds.length)} more seeded entries for a full top 8 bracket.</div>`;
+        return;
+      }
+
+      el.bracketView.innerHTML = bracketPairs.map((pair, index) => {
+        const a = seeds[pair[0] - 1];
+        const b = seeds[pair[1] - 1];
+        return `
+          <div class="match">
+            <div class="match-head"><span>Quarterfinal ${index + 1}</span><span>${pair[0]}v${pair[1]}</span></div>
+            ${matchTeam(pair[0], a)}
+            ${matchTeam(pair[1], b)}
+          </div>
+        `;
+      }).join("");
+    }
+
+    function matchTeam(seed, entry) {
+      return `
+        <div class="match-team">
+          <div class="rank">#${seed}</div>
+          <div>
+            <strong>${escapeHtml(entry.title)}</strong>
+            <div class="entry-meta">${state.settings.revealTeams ? escapeHtml(entry.team) : "Anonymous team"} / ${scoreEntry(entry)} points</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderAdmin() {
+      if (!state.entries.length) {
+        el.adminList.innerHTML = `<div class="empty">No submissions to manage.</div>`;
+        return;
+      }
+
+      el.adminList.innerHTML = state.entries.map((entry) => `
+        <div class="admin-item">
+          <div>
+            <strong>${escapeHtml(entry.title)}</strong>
+            <div class="entry-meta">${escapeHtml(entry.team)} / ${scoreEntry(entry)} points</div>
+          </div>
+          <button class="danger" data-delete="${entry.id}">Remove</button>
+        </div>
+      `).join("");
+
+      el.adminList.querySelectorAll("[data-delete]").forEach((button) => {
+        button.addEventListener("click", () => deleteEntry(button.dataset.delete));
+      });
+    }
+
+    function updateToggleLabels() {
+      el.toggleSubmissionsBtn.textContent = state.settings.submissionsOpen ? "Open" : "Closed";
+      el.toggleVotingBtn.textContent = state.settings.votingOpen ? "Open" : "Closed";
+      el.toggleRevealBtn.textContent = state.settings.revealTeams ? "Revealed" : "Hidden";
+    }
+
+    function saveSettings() {
+      state.settings.eventName = el.eventNameInput.value.trim() || "AMV Tourney Selector";
+      state.settings.seedCount = Number(el.seedCountInput.value);
+      state.settings.roundCount = Number(el.roundCountInput.value);
+      saveState();
+      showToast("Settings saved.");
+      render();
+    }
+
+    function toggleSetting(key) {
+      state.settings[key] = !state.settings[key];
+      saveState();
+      render();
+    }
+
+    async function deleteEntry(id) {
+      const entry = state.entries.find((item) => item.id === id);
+      if (!entry || !confirm(`Remove "${entry.title}"?`)) return;
+      state.entries = state.entries.filter((item) => item.id !== id);
+      if (entry.mediaType === "file") await deleteVideoFile(id);
+      Object.values(state.ballots).forEach((ballot) => {
+        Object.keys(ballot).forEach((rank) => {
+          if (ballot[rank] === id) delete ballot[rank];
+        });
+      });
+      Object.keys(state.ballots).forEach((ballotId) => {
+        if (!Object.keys(state.ballots[ballotId]).length) delete state.ballots[ballotId];
+      });
+      saveState();
+      showToast("Entry removed.");
+      render();
+    }
+
+    function clearVotes() {
+      if (!Object.keys(state.ballots).length || !confirm("Clear all ballots but keep submissions?")) return;
+      state.ballots = {};
+      saveState();
+      showToast("Ballots cleared.");
+      render();
+    }
+
+    async function resetAll() {
+      if (!confirm("Reset all submissions, ballots, and settings?")) return;
+      state.settings = defaultSettings();
+      state.entries = [];
+      state.ballots = {};
+      await clearVideoFiles();
+      saveState();
+      showToast("Everything reset.");
+      render();
+    }
+
+    function loadDemo() {
+      const now = Date.now();
+      state.entries = demoEntries.map((item, index) => ({
+        id: "demo-" + index + "-" + now,
+        title: item[0],
+        team: item[1],
+        source: item[2],
+        song: item[3],
+        link: item[4],
+        notes: item[5],
+        createdAt: new Date(now + index * 60000).toISOString(),
+        accent: index % accents.length
+      }));
+      state.ballots = {};
+      state.entries.forEach((entry, index) => {
+        const firstPlaceBallots = Math.max(1, 18 - index * 2);
+        for (let voteIndex = 0; voteIndex < firstPlaceBallots; voteIndex++) {
+          state.ballots[`demo-voter-${index}-${voteIndex}`] = {
+            first: entry.id,
+            second: state.entries[(index + 1) % state.entries.length].id,
+            third: state.entries[(index + 2) % state.entries.length].id
+          };
+        }
+      });
+      saveState();
+      showToast("Demo entries loaded.");
+      render();
+    }
+
+    function exportData() {
+      const payload = JSON.stringify({ ...state, exportedAt: new Date().toISOString() }, null, 2);
+      const blob = new Blob([payload], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = state.settings.eventName.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") + "-amv-tourney.json";
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      showToast("Export created.");
+    }
+
+    function importData(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const parsed = JSON.parse(reader.result);
+          if (!Array.isArray(parsed.entries)) throw new Error("Missing entries");
+          state.settings = { ...defaultSettings(), ...parsed.settings };
+          state.entries = parsed.entries.map((entry, index) => ({
+            ...entry,
+            accent: Number.isFinite(entry.accent) ? entry.accent : index % accents.length
+          }));
+          state.ballots = parsed.ballots && typeof parsed.ballots === "object" ? parsed.ballots : migrateLegacyVotes(state.entries);
+          saveState();
+          showToast("Import complete.");
+          render();
+        } catch (error) {
+          showToast("That file could not be imported.");
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = "";
+    }
+
+    function copySeeds() {
+      const seeds = getSeeds();
+      const text = seeds.map((entry, index) => {
+        const team = state.settings.revealTeams ? ` - ${entry.team}` : "";
+        return `#${index + 1} ${entry.title}${team} (${scoreEntry(entry)} points)`;
+      }).join("\n");
+      navigator.clipboard.writeText(text || "No seeds yet.");
+      showToast("Seeds copied to clipboard.");
+    }
+
+    function showToast(message) {
+      el.toast.textContent = message;
+      el.toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => el.toast.classList.remove("show"), 2600);
+    }
+
+    function escapeHtml(value) {
+      return String(value || "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[char]));
+    }
+
+    function escapeAttr(value) {
+      return escapeHtml(value).replace(/`/g, "&#096;");
+    }
+
+    function drawVisualizer() {
+      const canvas = document.getElementById("visualizer");
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width;
+      const h = canvas.height;
+      ctx.fillStyle = "#0c1012";
+      ctx.fillRect(0, 0, w, h);
+
+      const frames = [
+        ["#65d6cc", "#ec6b66"],
+        ["#f0bd62", "#78a7ff"],
+        ["#80d37a", "#c38cff"]
+      ];
+
+      frames.forEach((colors, index) => {
+        const x = 34 + index * 222;
+        const y = 42 + (index % 2) * 34;
+        const gradient = ctx.createLinearGradient(x, y, x + 180, y + 110);
+        gradient.addColorStop(0, colors[0]);
+        gradient.addColorStop(1, colors[1]);
+        ctx.fillStyle = gradient;
+        ctx.fillRect(x, y, 178, 102);
+        ctx.fillStyle = "rgba(0,0,0,.3)";
+        ctx.fillRect(x + 12, y + 12, 154, 78);
+        ctx.strokeStyle = "rgba(255,255,255,.34)";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(x, y, 178, 102);
+      });
+
+      for (let i = 0; i < 34; i++) {
+        const x = i * 24;
+        const height = 30 + Math.sin(i * .8) * 18 + (i % 5) * 7;
+        ctx.fillStyle = i % 3 === 0 ? "#65d6cc" : i % 3 === 1 ? "#f0bd62" : "#ec6b66";
+        ctx.globalAlpha = .72;
+        ctx.fillRect(x, h - 52 - height, 14, height);
+      }
+      ctx.globalAlpha = 1;
+
+      ctx.strokeStyle = "rgba(255,255,255,.22)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, h - 70);
+      for (let x = 0; x < w; x += 18) {
+        ctx.lineTo(x, h - 70 + Math.sin(x * .035) * 15);
+      }
+      ctx.stroke();
+    }
+  </script>
+</body>
+</html>
